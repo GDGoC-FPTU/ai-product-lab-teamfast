@@ -14,13 +14,14 @@ import os
 import sys
 from typing import Any
 
-import io
+from typing import Any
 
-# Force UTF-8 encoding on Windows to handle Vietnamese characters
 if sys.stdout.encoding != 'utf-8':
     try:
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+        if hasattr(sys.stdout, 'reconfigure'):
+            sys.stdout.reconfigure(encoding='utf-8')
+        if hasattr(sys.stderr, 'reconfigure'):
+            sys.stderr.reconfigure(encoding='utf-8')
     except Exception:
         pass
 
