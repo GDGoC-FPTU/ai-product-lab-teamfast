@@ -8,9 +8,13 @@
 
 ### 👥 Khai báo Thành viên & Nhóm:
 
-- **Tên nhóm:** Team Fast (Nhóm 01)
-- **Thành viên tham gia:**
-  1. Vũ Tuấn Phương - MSSV: 2A202600772
+> **Nhóm:** Team Fast
+> **Thành viên:**
+>
+> - [Nguyễn Minh Chiến] — [2A202600664]
+> - [Vũ Tuấn Phương] — [2A202600772]
+> - [Lê Quang Miền] — [2A202600715]
+> - [Nguyễn Hải Quân] - [2A202600660]
 
 ***
 
