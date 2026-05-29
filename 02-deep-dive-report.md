@@ -1,9 +1,9 @@
 # Lab 02 — Deep-Dive Report: Tối Ưu Xử Lý Khiếu Nại Cước Xanh SM
 
-> **Nhóm:** [Tên nhóm]
+> **Nhóm:** Team Fast
 > **Thành viên:**
 >
-> - [Nguyễn Minh Chiến] — [MSSV]
+> - [Nguyễn Minh Chiến] — [2A202600664]
 > - [Họ tên 2] — [MSSV]
 > - [Họ tên 3] — [MSSV]
 
