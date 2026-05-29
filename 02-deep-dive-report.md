@@ -4,8 +4,9 @@
 > **Thành viên:**
 >
 > - [Nguyễn Minh Chiến] — [2A202600664]
-> - [Họ tên 2] — [MSSV]
-> - [Họ tên 3] — [MSSV]
+> - [Vũ Tuấn Phương] — [2A202600772]
+> - [Lê Quang Miền] — [2A202600715]
+> - [] - []
 
 ---
 
