@@ -62,7 +62,7 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 | #   | Subsidiary (VinFast/Xanh SM...) | Lens               | Mô tả ngắn bài toán                                                                                                                                                                                     |
 | --- | ------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | **Vinhomes**                    | Lặp lại            | Phân loại và chuyển tuyến khiếu nại cư dân (mất nước, hỏng thang máy, ồn ào) gửi qua App Vinhomes Resident đến đúng ban quản lý tòa nhà — hiện tại nhân viên CSKH đọc từng ticket thủ công.             |
-| 2   | **Xanh SM**                     | Tốn thời gian      | Tóm tắt lý do khách hàng hủy chuyến từ ghi âm cuộc gọi và ghi chú tài xế để tìm pattern lỗi hệ thống — hiện tại team phân tích nghe lại ghi âm thủ công, mất 20 phút/chuyến.                            |
+| 2   | **Xanh SM**                     | Tốn thời gian      | Xử lý khiếu nại cước phí của khách hàng và tài xế — nhân viên CSKH phải nghe ghi âm, đối chiếu lộ trình GPS, so sánh bảng giá, rồi soạn phản hồi thủ công, mất 15-20 phút/vụ.                           |
 | 3   | **VinFast**                     | AI có thể tốt hơn  | Khách hàng mô tả lỗi xe bằng tiếng Việt đời thường (VD: "xe qua gờ giảm tốc kêu cụp cụp ở bánh trước") nhưng tổng đài phải tra cứu mã lỗi thủ công, phản hồi chậm 24-48h.                               |
 | 4   | **Vinmec**                      | Tốn thời gian      | Bác sĩ soạn thảo tóm tắt hồ sơ xuất viện (Discharge Summary) thủ công từ bệnh án điện tử, xét nghiệm, ghi chú lâm sàng — mất 20-30 phút/bệnh nhân, bác sĩ phàn nàn vì quá tải.                          |
 | 5   | **Vinpearl / VinWonders**       | Pain từ người khác | Quản lý khu vui chơi phải đọc hàng trăm review trên Booking, Agoda, Google Map mỗi tuần để lọc phản hồi tiêu cực ("phòng bẩn", "nhân viên thái độ tệ") — mất 8-10 giờ/tuần, bỏ lọt nhiều case khẩn cấp. |
@@ -118,31 +118,32 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 ┌─────────────────────────────────────────────────────────────┐
 │ QUICK PROBLEM CARD #2                                       │
 │                                                             │
-│ Bài toán (1 câu): Tự động tóm tắt & phân loại lý do khách  │
-│ hàng hủy chuyến Xanh SM từ ghi âm cuộc gọi và ghi chú.     │
+│ Bài toán (1 câu): Tối ưu xử lý khiếu nại cước phí Xanh SM  │
+│ bằng cách tự động đối chiếu lộ trình, cước và soạn phản hồi│
 │ Công ty thành viên: [ ] VinFast  [x] Xanh SM  [ ] Vinhomes  │
 │                     [ ] Vinmec   [ ] Khác                   │
 │                                                             │
-│ Ai đang đau (Actor)? Team phân tích vận hành Xanh SM phải    │
-│ nghe lại ghi âm thủ công và ghi chú từng chuyến bị hủy.     │
+│ Ai đang đau (Actor)? Nhân viên CSKH Xanh SM tại tổng đài     │
+│ xử lý khiếu nại cước; khách hàng & tài xế chờ phản hồi lâu. │
 │                                                             │
 │ Workflow thủ công hiện tại (5 bước):                        │
-│   1. Hệ thống ghi âm cuộc gọi hủy chuyến + lưu ghi chú TX  │
-│   ──> 2. Analyst chọn mẫu ngẫu nhiên 50 chuyến/ngày         │
-│   ──> 3. Nghe lại ghi âm, đọc ghi chú tài xế                 │
-│   ──> 4. Ghi lý do hủy vào Excel (10 category)              │
-│   ──> 5. Tổng hợp báo cáo tuần gửi Quản lý Vận hành        │
+│   1. Khách hàng/tài xế gửi khiếu nại cước qua hotline/App   │
+│   ──> 2. CSKH mở hệ thống, tra cứu lộ trình GPS chuyến đi  │
+│   ──> 3. Đối chiếu bảng giá cước theo km + thời gian chờ   │
+│   ──> 4. Soạn tin nhắn phản hồi giải thích cho khách hàng   │
+│   ──> 5. Nếu khiếu nại hợp lệ, tạo lệnh hoàn tiền thủ công │
 │                                                             │
-│ Bước nào tốn thời gian/lỗi nhất? Bước 3-4 (⏱ 20 phút/chuyến│
-│ Analyst phải nghe录音手工, phân loại cảm tính, dễ sai category│
+│ Bước nào tốn thời gian/lỗi nhất? Bước 2-4 (⏱ 15 phút/vụ)  │
+│ CSKH phải mở nhiều hệ thống (GPS, bảng giá, CRM) rồi soạn  │
+│ phản hồi thủ công, dễ tính sai hoặc phản hồi thiếu nhất quán│
 │                                                             │
-│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 3-4              │
-│ (LLM transcribe + phân tích nội dung → tự động gán category  │
-│  hủy chuyến + tóm tắt lý do chính)                          │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2-4              │
+│ (LLM tự động pull lộ trình GPS → tính toán chênh lệch cước  │
+│  → soạn draft phản hồi giải thích chi tiết cho khách hàng)  │
 │                                                             │
 │ Đo thành công bằng gì (Metric có số)? ______________________ │
-│   "Giảm thời gian phân tích từ 20 phút/chuyến xuống dưới   │
-│    2 phút; phân loại đúng category đạt 90%"                 │
+│   "Giảm thời gian xử lý khiếu nại từ 15 phút/vụ xuống dưới │
+│    3 phút; tỷ lệ phản hồi đúng bảng giá đạt 95%"           │
 │                                                             │
 │ Quick Architecture: [ ] No AI  [ ] Rule  [x] LLM  [ ] Agent │
 └─────────────────────────────────────────────────────────────┘
