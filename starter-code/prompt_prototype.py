@@ -12,16 +12,14 @@ Instructions:
 
 import os
 import sys
+import io
 from typing import Any
 
-from typing import Any
-
+# Force UTF-8 encoding on Windows to handle Vietnamese characters
 if sys.stdout.encoding != 'utf-8':
     try:
-        if hasattr(sys.stdout, 'reconfigure'):
-            sys.stdout.reconfigure(encoding='utf-8')
-        if hasattr(sys.stderr, 'reconfigure'):
-            sys.stderr.reconfigure(encoding='utf-8')
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
     except Exception:
         pass
 
@@ -83,43 +81,25 @@ def evaluate_prompt(user_input: str) -> str:
     """
     Calls the Gemini 2.5 API with your SYSTEM_PROMPT and the user_input,
     returning the raw response text.
+
+    Hint:
+        Set GEMINI_API_KEY or GOOGLE_API_KEY in your environment.
+        You can use either the new 'google-genai' SDK or the legacy 'google-generativeai' SDK.
     """
-    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or "mock-key"
-    
-    try:
-        # Option A: New Google GenAI SDK (Preferred Standard)
-        from google import genai
-        from google.genai import types
-        
-        client = genai.Client(api_key=api_key)
-        config = types.GenerateContentConfig(
+    from google import genai
+
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    client = genai.Client(api_key=api_key)
+
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=user_input,
+        config=genai.types.GenerateContentConfig(
             system_instruction=SYSTEM_PROMPT,
-            temperature=0.0,  # Setting to 0 for maximum boundary compliance
-        )
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=user_input,
-            config=config
-        )
-        return response.text or ""
-        
-    except (ImportError, Exception):
-        # Option B: Fallback to legacy google-generativeai SDK
-        import google.generativeai as genai
-        
-        genai.configure(api_key=api_key)
-        model_inst = genai.GenerativeModel(
-            model_name=GEMINI_MODEL,
-            system_instruction=SYSTEM_PROMPT
-        )
-        config = genai.types.GenerationConfig(
-            temperature=0.0
-        )
-        response = model_inst.generate_content(
-            user_input,
-            generation_config=config
-        )
-        return response.text or ""
+            temperature=0.2,
+        ),
+    )
+    return response.text
 
 
 
